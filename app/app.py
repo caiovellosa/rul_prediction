@@ -45,28 +45,28 @@ def main():
                 print('Invalid file format.')
             
             with right:
+                with st.spinner('Predicting RUL'):
             
-                survival_model = lgb.Booster(model_file='models/model.pkl')
-                
-                # Make predictions on test data
-                y_pred = survival_model.predict(df, 
-                                                num_iteration=survival_model.best_iteration
-                                                )
-                
-                results = pd.concat([df['AssetId'], pd.Series(y_pred, name='RUL')], 
-                                    axis=1)
-                
-                # Display the DataFrame
-                st.columns(4)[1].subheader("Results")
-                
-                st.dataframe(results, hide_index=True, use_container_width=True)
-                
-                # Download link
-                csv = results.to_csv(index=False)
-                st.download_button("Download Results", data=csv, 
-                                    file_name="results.csv", 
-                                    mime="text/csv",
-                                    use_container_width=True)
+                    survival_model = lgb.Booster(model_file='models/model.pkl')
+                    
+                    # Make predictions on test data
+                    y_pred = survival_model.predict(df, 
+                                                    num_iteration=survival_model.best_iteration
+                                                    )
+                    
+                    results = pd.Series(y_pred, name='RUL', index=df['AssetId'])
+                    
+                    # Display the DataFrame
+                    st.columns(4)[1].subheader("Results")
+                    
+                    st.dataframe(results, hide_index=False, use_container_width=True)
+                    
+                    # Download link
+                    csv = results.to_csv(index=False)
+                    st.download_button("Download Results", data=csv, 
+                                        file_name="results.csv", 
+                                        mime="text/csv",
+                                        use_container_width=True)
 
 if __name__ == "__main__":
     main()
