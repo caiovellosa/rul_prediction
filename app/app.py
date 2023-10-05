@@ -46,7 +46,7 @@ def main():
             
         with right:
         
-            survival_model = lgb.Booster(model_file='model.pkl')
+            survival_model = lgb.Booster(model_file='../models/model.pkl')
             
             # Make predictions on test data
             y_pred = survival_model.predict(df, 
